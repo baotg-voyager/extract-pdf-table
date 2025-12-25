@@ -76,9 +76,16 @@ camelot/
 ├── requirements.txt       # Dependencies
 ├── src/
 │   ├── attendance/        # Attendance extraction
-│   │   ├── parser.py
-│   │   ├── utils.py
-│   │   └── extractors.py
+│   │   ├── parser.py      # Main parser entry point
+│   │   ├── extract.py     # Data extraction functions
+│   │   ├── helpers/       # Helper modules (refactored)
+│   │   │   ├── __init__.py
+│   │   │   ├── validation.py    # PDF validation
+│   │   │   ├── table.py         # Table processing
+│   │   │   ├── employee.py      # Employee record building
+│   │   │   ├── extraction.py    # Data extraction utilities
+│   │   │   └── utils.py         # Common utility functions
+│   │   └── transformers.py  # Data transformation
 │   ├── allowance/         # Allowance extraction
 │   │   └── parser.py
 │   └── common.py          # Shared functions
