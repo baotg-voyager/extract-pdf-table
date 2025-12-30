@@ -6,6 +6,7 @@ Test: python app.py [attendance|allowance] --test
 
 import sys
 import json
+import time
 from pathlib import Path
 
 
@@ -53,21 +54,30 @@ def main():
         
         print(f"PDF: {pdf_path}")
         print("=" * 70)
-        records = parse_pdf(pdf_path)
         
+        # Measure parsing time
+        parse_start = time.time()
+        records = parse_pdf(pdf_path)
+        parse_time = time.time() - parse_start
+        
+        # Measure processing time
+        process_start = time.time()
         Path(output_folder).mkdir(parents=True, exist_ok=True)
         save_json(records, f'{output_folder}/attendance_records.json')
         save_csv(records, f'{output_folder}/attendance_records.csv')
         save_markdown(records, f'{output_folder}/attendance_records.md', 'Attendance Records')
+        
+        process_time = time.time() - process_start
         
         print("\n" + "=" * 70)
         print(f"Extracted {len(records)} employee records")
         print("=" * 70)
         
         print("\n" + "=" * 70)
-        print("JSON Output:")
+        print("TIMING RESULTS")
         print("=" * 70)
-        print(json.dumps(records, ensure_ascii=False, indent=2))
+        print(f"Parsing time: {parse_time:.2f} seconds")
+        print(f"Processing time: {process_time:.2f} seconds")
     
     elif parser_type == "allowance":
         print("\n" + "=" * 70)
@@ -82,27 +92,31 @@ def main():
         
         print(f"PDF: {pdf_path}")
         print("=" * 70)
+        
+        # Measure parsing time
+        parse_start = time.time()
         employees = parse_pdf(pdf_path)
+        parse_time = time.time() - parse_start
         
         if employees:
+            # Measure processing time
+            process_start = time.time()
             Path(output_folder).mkdir(parents=True, exist_ok=True)
             save_json(employees, f'{output_folder}/driver_allowance.json')
             save_csv(employees, f'{output_folder}/driver_allowance.csv')
             save_markdown(employees, f'{output_folder}/driver_allowance.md', 'Driver Allowance List')
+            
+            process_time = time.time() - process_start
             
             print("\n" + "=" * 70)
             print(f"✓ Complete! {len(employees)} records → {output_folder}/")
             print("=" * 70)
             
             print("\n" + "=" * 70)
-            print("JSON Output:")
+            print("TIMING RESULTS")
             print("=" * 70)
-            print(json.dumps(employees, ensure_ascii=False, indent=2))
-        else:
-            print("\n✗ No data found")
-    
-    else:
-        print(f"\n❌ Invalid parser type: '{parser_type}'")
+            print(f"Parsing time: {parse_time:.2f} seconds")
+            print(f"Processing time: {process_time:.2f} seconds")
         print("Valid options: attendance, allowance")
         sys.exit(1)
 
