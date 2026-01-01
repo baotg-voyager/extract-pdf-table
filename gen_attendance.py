@@ -145,7 +145,8 @@ def generate_pdf_with_employees(
     output_path: str = "output/random_employees.pdf",
     num_employees: int = None,
     json_file: str = None,
-    template_path: str = "materials/出勤簿 - shukkinbo - attendance book.pdf"
+    template_path: str = "materials/出勤簿 - shukkinbo - attendance book.pdf",
+    generated_only: bool = False
 ) -> None:
     """
     Generate a PDF with employees from random generation or JSON file.
@@ -155,6 +156,7 @@ def generate_pdf_with_employees(
         num_employees: Number of random employees to generate (ignored if json_file provided)
         json_file: Path to JSON file with employee data
         template_path: Path to template PDF
+        generated_only: If True, only include duplicated pages (exclude original 8 pages)
     """
     print("="*70)
     print(f"Employee PDF Generator")
@@ -191,8 +193,11 @@ def generate_pdf_with_employees(
     template_ids = ["240631", "250632", "250633", "250634"]
     
     # Create test_data entries
-    # First entry keeps the original template
-    test_data = [{}]
+    # First entry keeps the original template (unless generated_only is True)
+    if generated_only:
+        test_data = []
+    else:
+        test_data = [{}]
     
     # Add replacement entries for each employee after the first
     # Each duplicated page replaces all 4 employees with a new set of 4 employees
@@ -222,7 +227,7 @@ def generate_pdf_with_employees(
             output_path=output_path,
             test_data=test_data,
             template_page_index=-1,  # Use last page as template
-            keep_original_first_page=True
+            keep_original_first_page=not generated_only
         )
         
         generator.close()
@@ -233,7 +238,14 @@ def generate_pdf_with_employees(
         print("="*70)
         print(f"\nOutput: {output_path}")
         print(f"Total Employees: {num_employees}")
-        print(f"Total Pages: {len(test_data) + 7}")  # Original 8 pages + new pages
+        
+        if generated_only:
+            print(f"Total Pages: {len(test_data)}")  # Only generated pages
+            print(f"Mode: Generated pages only (no original template pages)")
+        else:
+            print(f"Total Pages: {len(test_data) + 7}")  # Original 8 pages + new pages
+            print(f"Mode: Original template pages + generated pages")
+        
         print(f"File Size: {Path(output_path).stat().st_size / 1024:.1f} KB")
         print("\nYou can now use Camelot to extract employee data from the PDF!")
         
@@ -247,7 +259,8 @@ def generate_pdf_with_employees(
 def generate_pdf_with_random_employees(
     output_path: str = "output/random_employees.pdf",
     num_employees: int = 40,
-    template_path: str = "materials/出勤簿 - shukkinbo - attendance book.pdf"
+    template_path: str = "materials/出勤簿 - shukkinbo - attendance book.pdf",
+    generated_only: bool = False
 ) -> None:
     """
     Generate a PDF with random employees.
@@ -256,12 +269,14 @@ def generate_pdf_with_random_employees(
         output_path: Path for output PDF
         num_employees: Number of employees to generate (default 40)
         template_path: Path to template PDF
+        generated_only: If True, only include generated pages (exclude original 8 pages)
     """
     generate_pdf_with_employees(
         output_path=output_path,
         num_employees=num_employees,
         json_file=None,
-        template_path=template_path
+        template_path=template_path,
+        generated_only=generated_only
     )
 
 
@@ -297,6 +312,11 @@ def main():
         type=int,
         help="Random seed for reproducibility (only used with random generation)"
     )
+    parser.add_argument(
+        "--generated-only",
+        action="store_true",
+        help="Only include generated pages (exclude original 8 template pages)"
+    )
     
     args = parser.parse_args()
     
@@ -310,7 +330,8 @@ def main():
         output_path=args.output,
         num_employees=args.num_employees if not args.json else None,
         json_file=args.json,
-        template_path=args.template
+        template_path=args.template,
+        generated_only=args.generated_only
     )
 
 
