@@ -2,7 +2,29 @@
 
 Extract employee attendance and allowance data from PDF files using Camelot.
 
-## Installation
+## Tools
+
+### 1. Attendance PDF Generator (`gen_attendance.py`)
+
+Generate attendance PDF files with employee data from JSON files or with random employees.
+
+**Quick Start:**
+```bash
+# Generate 40 random employees
+python3 gen_attendance.py
+
+# Generate from JSON file
+python3 gen_attendance.py --json materials/attendance300.json
+
+# Generated pages only (no original template)
+python3 gen_attendance.py --json materials/attendance300.json --generated-only
+```
+
+See [docs/ATTENDANCE_GENERATION_GUIDE.md](docs/ATTENDANCE_GENERATION_GUIDE.md) for complete documentation.
+
+### 2. Data Extraction (`app.py`)
+
+Extract data from attendance and allowance PDFs.
 
 ### Prerequisites
 

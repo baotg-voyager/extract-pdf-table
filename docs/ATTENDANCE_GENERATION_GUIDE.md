@@ -1,8 +1,8 @@
-# JSON Mode - Employee PDF Generator
+# Attendance PDF Generator - gen_attendance.py
 
 ## Overview
 
-The employee PDF generator now supports **two modes**:
+The attendance PDF generator supports **two modes**:
 
 1. **Random Mode** (default) - Generate random employees with realistic Japanese names
 2. **JSON Mode** (new) - Load actual employee data from a JSON file
@@ -12,7 +12,7 @@ The employee PDF generator now supports **two modes**:
 ### Generate PDF from JSON file
 
 ```bash
-python3 generate_random_employees.py --json materials/attendance300.json
+python3 gen_attendance.py --json materials/attendance300.json
 ```
 
 Output: `output/random_employees.pdf` with all 300 employees from the JSON file
@@ -20,13 +20,13 @@ Output: `output/random_employees.pdf` with all 300 employees from the JSON file
 ### Custom output path
 
 ```bash
-python3 generate_random_employees.py --json materials/attendance300.json -o output/my_employees.pdf
+python3 gen_attendance.py --json materials/attendance300.json -o output/my_employees.pdf
 ```
 
 ### Custom template
 
 ```bash
-python3 generate_random_employees.py --json data.json -t path/to/template.pdf
+python3 gen_attendance.py --json data.json -t path/to/template.pdf
 ```
 
 ## JSON File Format
@@ -83,7 +83,7 @@ Page 13:     Template with employees 17-20 from JSON
 
 ### Random Mode (Default)
 ```bash
-python3 generate_random_employees.py -n 40
+python3 gen_attendance.py -n 40
 ```
 - Generates 40 random employees
 - Random 6-digit IDs (100000-999999)
@@ -93,7 +93,7 @@ python3 generate_random_employees.py -n 40
 
 ### JSON Mode
 ```bash
-python3 generate_random_employees.py --json employees.json
+python3 gen_attendance.py --json employees.json
 ```
 - Loads all employees from JSON file
 - Uses exact IDs from JSON
@@ -106,7 +106,7 @@ python3 generate_random_employees.py --json employees.json
 ### Example 1: Generate from 300 employees
 
 ```bash
-python3 generate_random_employees.py --json materials/attendance300.json
+python3 gen_attendance.py --json materials/attendance300.json
 ```
 
 Result:
@@ -127,7 +127,7 @@ Create `my_employees.json`:
 
 Then:
 ```bash
-python3 generate_random_employees.py --json my_employees.json -o output/my_company.pdf
+python3 gen_attendance.py --json my_employees.json -o output/my_company.pdf
 ```
 
 Result:
@@ -138,13 +138,13 @@ Result:
 
 ```bash
 # Random 40 employees
-python3 generate_random_employees.py -n 40 -o output/random.pdf
+python3 gen_attendance.py -n 40 -o output/random.pdf
 
 # Actual 300 employees from JSON
-python3 generate_random_employees.py --json materials/attendance300.json -o output/actual.pdf
+python3 gen_attendance.py --json materials/attendance300.json -o output/actual.pdf
 
 # Different template
-python3 generate_random_employees.py --json data.json -t template2.pdf
+python3 gen_attendance.py --json data.json -t template2.pdf
 ```
 
 ## Supported Field Names
@@ -163,15 +163,15 @@ The tool provides helpful error messages:
 
 ```bash
 # File not found
-$ python3 generate_random_employees.py --json nonexistent.json
+$ python3 gen_attendance.py --json nonexistent.json
 ✗ Error: JSON file not found: nonexistent.json
 
 # Invalid JSON format
-$ python3 generate_random_employees.py --json bad.json
+$ python3 gen_attendance.py --json bad.json
 ✗ Error: Invalid JSON format: ...
 
 # Missing required fields
-$ python3 generate_random_employees.py --json missing_fields.json
+$ python3 gen_attendance.py --json missing_fields.json
 ✗ Error: Each employee must have 'employee_id' (or 'shain_id') and 'name' fields
 ```
 
@@ -219,9 +219,9 @@ print(f"Successfully extracted {len(tables)} tables")
 
 | Task | Command |
 |------|---------|
-| Random 40 employees | `python3 generate_random_employees.py` |
-| Random 100 employees | `python3 generate_random_employees.py -n 100` |
-| From JSON file | `python3 generate_random_employees.py --json employees.json` |
-| Custom output | `python3 generate_random_employees.py -o output/custom.pdf` |
-| Reproducible random | `python3 generate_random_employees.py --seed 12345` |
-| Help | `python3 generate_random_employees.py --help` |
+| Random 40 employees | `python3 gen_attendance.py` |
+| Random 100 employees | `python3 gen_attendance.py -n 100` |
+| From JSON file | `python3 gen_attendance.py --json employees.json` |
+| Custom output | `python3 gen_attendance.py -o output/custom.pdf` |
+| Reproducible random | `python3 gen_attendance.py --seed 12345` |
+| Help | `python3 gen_attendance.py --help` |
